@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GetPhoneIPTest</string>
+    <string name="shuaxin">扫描</string>
+    <string name="send_sel">我要发送</string>
+    <string name="accept_sel">我要接收</string>
+    <string name="exit">退出</string>
+    <string name="cancel">取消</string>
+    <string name="select_file_path">已选问件路径：</string>
+    <string name="select_ip">已选发送对象IP：</string>
+    <string name="but_select_file">选择文件</string>
+    <string name="but_send">发送文件</string>
+    <string name="but_s_hostpot">搜索热点</string>
+    <string name="w_accept">等待接收...</string>
+</resources>
