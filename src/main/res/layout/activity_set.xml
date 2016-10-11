@@ -19,6 +19,7 @@
         <EditText
             android:id="@+id/et_set_hp_name"
             android:layout_width="match_parent"
+            android:maxLines="1"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

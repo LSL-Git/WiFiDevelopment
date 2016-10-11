@@ -46,7 +46,7 @@ public class SetActivity extends Activity implements View.OnClickListener{
             case R.id.but_save_setting:
                 String hostpot_name =  et_name.getText().toString();
                 if (!TextUtils.isEmpty(hostpot_name)) {
-                    mspf.Save(hostpot_name);
+                    mspf.Save("LSL" + hostpot_name);
                     Toast.makeText(this, "保存成功", 1).show();
                     finish();
                 } else {
