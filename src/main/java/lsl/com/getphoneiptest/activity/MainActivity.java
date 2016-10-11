@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lsl.com.getphoneiptest.R;
+import lsl.com.getphoneiptest.tool.MySharepreferences;
 
 /** 选择操作
  * Created by M1308_000 on 2016/9/18.
@@ -36,19 +38,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private WifiReceiver wifiReceiver;
     private boolean isConnected = false;
     private TextView but_exit;
+    private TextView tv_set;
+    private MySharepreferences mspf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mspf = new MySharepreferences(this);
+        mspf.Save("LSLLSL");
+
         but_send = (TextView) findViewById(R.id.but_sel_send);
         but_accept = (TextView) findViewById(R.id.but_sel_accept);
         but_exit = (TextView) findViewById(R.id.but_exit);
+        tv_set = (TextView) findViewById(R.id.tv_set);
 
         but_send.setOnClickListener(this);
         but_accept.setOnClickListener(this);
         but_exit.setOnClickListener(this);
+        tv_set.setOnClickListener(this);
         // 获取WiFi管理服务
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiReceiver = new WifiReceiver();
@@ -72,10 +81,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent intent1 = new Intent(this, AcceptActivity.class);
                 startActivity(intent1);
                 wifiManager.startScan();
-//                Toast.makeText(this, "????????", 1).show();
                 break;
             case R.id.but_exit:
                 finish();
+                break;
+            case R.id.tv_set:
+                Intent intent2 = new Intent(this, SetActivity.class);
+                startActivity(intent2);
                 break;
         }
     }
@@ -90,7 +102,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             // 热点配置类
             WifiConfiguration apconfig = new WifiConfiguration();
             // 设置热点名称
-            apconfig.SSID = "LSL";
+            apconfig.SSID = mspf.ReadHpName().substring(3, mspf.ReadHpName().length());
             // 设置热点密码
             apconfig.preSharedKey = null;
             // 通过反射调用设置热点
@@ -121,7 +133,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         passableHotsPot = new ArrayList<>();
         for (ScanResult result : wifiList) {
             Log.e("MainActivity", result.SSID);
-            if ((result.SSID).contains("LSL")) {
+            if ((result.SSID).contains(mspf.ReadHpName().substring(3, mspf.ReadHpName().length()))) {
                 passableHotsPot.add(result.SSID);
             }
         }

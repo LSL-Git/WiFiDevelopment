@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GetPhoneIPTest</string>
+    <string name="app_name">WiFi文件传输</string>
     <string name="shuaxin">扫描</string>
     <string name="send_sel">我要发送</string>
     <string name="accept_sel">我要接收</string>
@@ -10,5 +10,7 @@
     <string name="but_select_file">选择文件</string>
     <string name="but_send">发送文件</string>
     <string name="but_s_hostpot">搜索热点</string>
-    <string name="w_accept">等待接收...</string>
+    <string name="w_accept">正等待接收...</string>
+    <string name="setting">设置</string>
+    <string name="save_set">保存设置</string>
 </resources>

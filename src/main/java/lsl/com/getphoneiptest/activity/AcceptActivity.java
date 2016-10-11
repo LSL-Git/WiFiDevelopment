@@ -46,6 +46,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
     private TextView tv_isconnected;
     private String hostpotSSID;
     private Button but_exit;
+    private boolean bool;
 
     public static void GetFlieName(String str){  //得到接收文件的文件名，并将其显示在TextView中
         filename = str;
@@ -68,7 +69,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         but_exit = (Button) findViewById(R.id.but_cancel1);
 
         hotspotList = new ArrayList<>();
-        hotspotAdapter = new ArrayAdapter(AcceptActivity.this, android.R.layout.simple_list_item_1, hotspotList);
+        hotspotAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, hotspotList);
         lv_hostPost.setAdapter(hotspotAdapter);
         ListOnItemClickListener wifiListListener = new ListOnItemClickListener();
         lv_hostPost.setOnItemClickListener(wifiListListener);
@@ -80,8 +81,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){  //判断SDCard是否存在并且可以读写
             listenIntent = new Intent(this, ListenService.class);
             startService(listenIntent);                            //启动后台服务
-        }
-        else{
+        }else{
             textView.setText("请插入SD卡！");             //提示SD卡不存在
         }
     }
@@ -155,7 +155,11 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
             ScanResult strScanResult = hostpotResultList.get(i);
             int lev = WifiManager.calculateSignalLevel(strScanResult.level, 5);
             String str = strScanResult.SSID + "---(信号强度：" + lev + " )";
-            boolean bool = hotspotList.add(str);
+            Toast.makeText(this, "正在扫描...", 10).show();
+            Log.e("AcceptActivity", str.substring(0,3));
+            if (str.substring(0, 3).equals("LSL")) {
+                bool = hotspotList.add(str.substring(3,str.length()));
+            }
             if (bool) {
                 hotspotAdapter.notifyDataSetChanged();
             } else {
