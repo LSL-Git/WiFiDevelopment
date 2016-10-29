@@ -144,7 +144,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     private Handler handler = new Handler() {
-        int i = 0;
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {

@@ -47,7 +47,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         mspf = new MySharepreferences(this);
-        mspf.Save("LSLLSL");
+        if (mspf.ReadHpName() == null) {
+            mspf.Save("LSLLSL");
+        }
 
         but_send = (TextView) findViewById(R.id.but_sel_send);
         but_accept = (TextView) findViewById(R.id.but_sel_accept);
@@ -102,7 +104,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             // 热点配置类
             WifiConfiguration apconfig = new WifiConfiguration();
             // 设置热点名称
-            apconfig.SSID = mspf.ReadHpName().substring(3, mspf.ReadHpName().length());
+            apconfig.SSID = mspf.ReadHpName();
             // 设置热点密码
             apconfig.preSharedKey = null;
             // 通过反射调用设置热点
@@ -133,7 +135,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         passableHotsPot = new ArrayList<>();
         for (ScanResult result : wifiList) {
             Log.e("MainActivity", result.SSID);
-            if ((result.SSID).contains(mspf.ReadHpName().substring(3, mspf.ReadHpName().length()))) {
+            if ((result.SSID).contains(mspf.ReadHpName())) {
                 passableHotsPot.add(result.SSID);
             }
         }
