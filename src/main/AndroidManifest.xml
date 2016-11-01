@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
+    <uses-permission android:name="android.permission.VIBRATE" />  <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />        <!-- 使用照相机权限 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />   <!-- 自动聚焦权限 -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_img"
@@ -28,6 +33,13 @@
         <activity android:name=".activity.SendActivity"/>
         <service android:name=".service.ListenService"/>
         <activity android:name=".activity.SetActivity"/>
+        <activity android:name=".activity.QRcodeActivity"/>
+        <activity
+            android:name=".zxing.activity.CaptureActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

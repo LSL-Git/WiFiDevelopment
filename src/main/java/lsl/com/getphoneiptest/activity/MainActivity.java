@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean flag = false;
     private WifiManager wifiManager;
     private String isOk;
+    private boolean file_isExist = false;
     private List<ScanResult> wifiList;
     private List<String> passableHotsPot;
     private WifiReceiver wifiReceiver;
@@ -40,16 +43,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView but_exit;
     private TextView tv_set;
     private MySharepreferences mspf;
+    private String filePath;
+    private Uri fileUri;
+    public static File file = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mspf = new MySharepreferences(this);
-        if (mspf.ReadHpName() == null) {
-            mspf.Save("LSLLSL");
-        }
 
         but_send = (TextView) findViewById(R.id.but_sel_send);
         but_accept = (TextView) findViewById(R.id.but_sel_accept);
@@ -66,6 +67,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mspf = new MySharepreferences(this);
+        Log.e("MainActivity", String.valueOf(mspf.ReadHpName().isEmpty()));
+        if (mspf.ReadHpName().isEmpty()) {
+            mspf.Save("LSLLSL");
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.but_sel_send:
@@ -76,8 +87,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 } else {
                     isOk = "热点开启失败";
                 }
-                Intent intent = new Intent(this, SendActivity.class);
-                startActivity(intent);
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 10);
+
                 break;
             case R.id.but_sel_accept:
                 Intent intent1 = new Intent(this, AcceptActivity.class);
@@ -91,6 +106,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent intent2 = new Intent(this, SetActivity.class);
                 startActivity(intent2);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (requestCode == 10) {
+                fileUri = data.getData();
+                filePath = SendActivity.getRealFilePath(MainActivity.this, fileUri);
+                file = new File(filePath);
+
+                Log.e("MainActivity", filePath);
+                if (filePath != null) {
+                    Intent intent3 = new Intent(this, SendActivity.class);
+                    intent3.putExtra("filePath", filePath);
+                    intent3.putExtra("isOK", isOk);
+                    startActivity(intent3);
+                }
+//
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

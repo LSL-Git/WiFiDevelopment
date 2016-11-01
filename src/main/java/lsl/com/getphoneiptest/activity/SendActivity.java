@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -22,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.WriterException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +37,9 @@ import java.util.List;
 
 import lsl.com.getphoneiptest.R;
 import lsl.com.getphoneiptest.utils.WifiUtil;
+import lsl.com.getphoneiptest.zxing.encoding.EncodingHandler;
+
+import static lsl.com.getphoneiptest.activity.MainActivity.file;
 
 public class SendActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -44,8 +50,8 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
 
     public String AcceptIP = null;
     private Uri fileUri =null;
-    private String filePath = null;
-    private File file = null;
+//    private String filePath = null;
+//    private File file = null;
     private int LocalListenPort = 4567;
     private Thread sendThread = null;
     private ListView lv_ipList;
@@ -54,6 +60,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
 
     private Thread thread;
     private Button but_cancel;
+    private String filepath;
 
 
     @Override
@@ -64,7 +71,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         tv = (TextView) findViewById(R.id.tv_show);
         tv2 = (TextView) findViewById(R.id.tv2);
         but = (Button) findViewById(R.id.but_cls);
-        but_sel_file = (Button) findViewById(R.id.but_select);
+        but_sel_file = (Button) findViewById(R.id.but_create_zx);
         but_send = (Button) findViewById(R.id.but_send);
         lv_ipList = (ListView) findViewById(R.id.lv_isconnect);
         but_cancel = (Button) findViewById(R.id.but_cancel);
@@ -75,6 +82,12 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         ListOnItemClickListener listener = new ListOnItemClickListener();
         lv_ipList.setOnItemClickListener(listener);
         but_cancel.setOnClickListener(this);
+
+        Intent intent = getIntent();
+        filepath = intent.getStringExtra("filePath");
+        String isok = intent.getStringExtra("isOK");
+        Toast.makeText(SendActivity.this, isok, 1).show();
+        tv.setText("已选文件：" + filepath);
 
 
     }
@@ -120,12 +133,19 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 thread.start();
                 break;
-            case R.id.but_select:
-                // 隐式启动系统内置的相册Activity
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 10);
+            case R.id.but_create_zx:
+//                // 隐式启动系统内置的相册Activity
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(intent, 10);
+                if (!TextUtils.isEmpty(filepath)) {
+                    Intent intent = new Intent(SendActivity.this, QRcodeActivity.class);
+                    intent.putExtra("filePath", filepath);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SendActivity.this, "未选择发送文件", 1).show();
+                }
                 break;
             case R.id.but_send:
                 AcceptIP = tv2.getText().toString();
@@ -156,6 +176,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     adapter = new ArrayAdapter<>(SendActivity.this, android.R.layout.simple_list_item_1, isconnectIPList);
                     lv_ipList.setAdapter(adapter);
                     Log.e("SendActivity", ">>>>>>>>>");
+                    Toast.makeText(SendActivity.this, "正在扫描...", 0).show();
                     break;
             }
         }
@@ -182,24 +203,27 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            if (requestCode == 10) {
-                // 根据Activity 的返回值， 得到文件名与文件的路径
-                fileUri = data.getData();
-                // 根据文件的uri得到文件的路径地址
-                filePath = SendActivity.getRealFilePath(this, fileUri);
-    //            Log.e("FilePath", filePath);
-                System.out.println(filePath);
-                file = new File(filePath);
-                tv.setText("已选文件：" + filePath);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        try {
+//            if (requestCode == 10) {
+//                // 根据Activity 的返回值， 得到文件名与文件的路径
+//                fileUri = data.getData();
+//                // 根据文件的uri得到文件的路径地址
+//                filePath = SendActivity.getRealFilePath(this, fileUri);
+//    //            Log.e("FilePath", filePath);
+//                System.out.println(filePath);
+//                file = new File(filePath);
+//                tv.setText("已选文件：" + filePath);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+
+
     //根据文件的Uri得到文件的路径地址（不用看懂）
     public static String getRealFilePath(Context context,final Uri uri) {
         if ( null == uri )

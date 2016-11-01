@@ -24,14 +24,14 @@
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/but_select"
+        android:id="@+id/but_create_zx"
         android:layout_margin="5dp"
         android:textColor="@color/colorW"
         android:textSize="20sp"
         android:background="@drawable/but_bg_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/but_select_file"/>
+        android:text="生成二维码"/>
 
     <Button
         android:id="@+id/but_send"

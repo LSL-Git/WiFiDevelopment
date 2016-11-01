@@ -1,6 +1,7 @@
 package lsl.com.getphoneiptest.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
@@ -25,6 +26,7 @@ import java.util.List;
 import lsl.com.getphoneiptest.R;
 import lsl.com.getphoneiptest.service.ListenService;
 import lsl.com.getphoneiptest.utils.WifiUtil;
+import lsl.com.getphoneiptest.zxing.activity.CaptureActivity;
 
 /** 接收文件
  * Created by M1308_000 on 2016/9/18.
@@ -47,6 +49,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
     private String hostpotSSID;
     private Button but_exit;
     private boolean bool;
+    private Button but_scan;
 
     public static void GetFlieName(String str){  //得到接收文件的文件名，并将其显示在TextView中
         filename = str;
@@ -67,6 +70,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         tv_mIp = (TextView) findViewById(R.id.tv_mIp);
         tv_isconnected = (TextView) findViewById(R.id.tv_isconnecthostpot);
         but_exit = (Button) findViewById(R.id.but_cancel1);
+        but_scan = (Button) findViewById(R.id.but_scan);
 
         hotspotList = new ArrayList<>();
         hotspotAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, hotspotList);
@@ -74,6 +78,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         ListOnItemClickListener wifiListListener = new ListOnItemClickListener();
         lv_hostPost.setOnItemClickListener(wifiListListener);
 
+        but_scan.setOnClickListener(this);
         but_search.setOnClickListener(this);
         but_exit.setOnClickListener(this);
         wifiUtil = new WifiUtil(AcceptActivity.this);
@@ -109,9 +114,25 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
                 wifiUtil.OpenWifi();
                 Log.e("AcceptActivity", wifiUtil.getSSID());
                 break;
+            case R.id.but_scan:
+                // 启动二维码扫描
+                Intent openCamera = new Intent(AcceptActivity.this, CaptureActivity.class);
+                startActivityForResult(openCamera, 0);
+                break;
             case R.id.but_cancel1:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString("result");
+            tv_mIp.setText(scanResult);
         }
     }
 

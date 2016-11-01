@@ -40,6 +40,16 @@
         android:text="@string/but_s_hostpot"/>
 
     <Button
+        android:layout_marginBottom="5dp"
+        android:id="@+id/but_scan"
+        android:textSize="20sp"
+        android:textColor="@color/colorW"
+        android:background="@drawable/but_bg_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="扫描二维码"/>
+
+    <Button
         android:textSize="20sp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
