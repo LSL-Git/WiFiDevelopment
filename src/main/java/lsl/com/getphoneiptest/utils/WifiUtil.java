@@ -43,6 +43,10 @@ public class WifiUtil {
         }
         return wifiManager.isWifiEnabled();
     }
+    // 断开当前连接
+    public boolean OffConnected() {
+        return wifiManager.disconnect();
+    }
 
     // 开始扫描WiFi
     public void WifiStartScan() {

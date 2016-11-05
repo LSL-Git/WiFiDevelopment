@@ -23,6 +23,7 @@ import java.util.List;
 
 import lsl.com.getphoneiptest.R;
 import lsl.com.getphoneiptest.tool.MySharepreferences;
+import lsl.com.getphoneiptest.utils.WifiUtil;
 
 /** 选择操作
  * Created by M1308_000 on 2016/9/18.
@@ -35,7 +36,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean flag = false;
     private WifiManager wifiManager;
     private String isOk;
-    private boolean file_isExist = false;
     private List<ScanResult> wifiList;
     private List<String> passableHotsPot;
     private WifiReceiver wifiReceiver;
@@ -95,9 +95,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.but_sel_accept:
+                WifiUtil wifiUtil = new WifiUtil(MainActivity.this);
                 Intent intent1 = new Intent(this, AcceptActivity.class);
+                wifiUtil.OpenWifi();
                 startActivity(intent1);
-                wifiManager.startScan();
                 break;
             case R.id.but_exit:
                 finish();

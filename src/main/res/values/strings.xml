@@ -13,4 +13,5 @@
     <string name="w_accept">正等待接收...</string>
     <string name="setting">设置</string>
     <string name="save_set">保存设置</string>
+    <string name="send_for_qr">二维码发送</string>
 </resources>

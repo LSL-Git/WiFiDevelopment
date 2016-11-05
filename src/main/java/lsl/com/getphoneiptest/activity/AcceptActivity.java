@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,7 +48,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
     private TextView tv_mIp;
     private TextView tv_isconnected;
     private String hostpotSSID;
-    private Button but_exit;
+    private TextView but_exit;
     private boolean bool;
     private Button but_scan;
 
@@ -69,7 +70,7 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         lv_hostPost = (ListView) findViewById(R.id.lv_hostpot);
         tv_mIp = (TextView) findViewById(R.id.tv_mIp);
         tv_isconnected = (TextView) findViewById(R.id.tv_isconnecthostpot);
-        but_exit = (Button) findViewById(R.id.but_cancel1);
+        but_exit = (TextView) findViewById(R.id.but_cancel1);
         but_scan = (Button) findViewById(R.id.but_scan);
 
         hotspotList = new ArrayList<>();
@@ -132,7 +133,14 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString("result");
-            tv_mIp.setText(scanResult);
+            // 扫描二维码自动连接指定热点
+            if (!TextUtils.isEmpty(scanResult)) {
+                if (wifiUtil.ConnectHostpot(scanResult)) {
+                    Toast.makeText(AcceptActivity.this, "正在连接 " + scanResult, 1).show();
+                } else {
+                    Toast.makeText(AcceptActivity.this, "网络不可用", 1).show();
+                }
+            }
         }
     }
 
@@ -164,10 +172,9 @@ public class AcceptActivity extends Activity implements View.OnClickListener{
         if (thread != null) {
             thread.interrupt();
         }
-        if (wifiUtil.CloseWifi()) {
-            Toast.makeText(AcceptActivity.this, "WiFi已关闭", 1).show();
+        if (wifiUtil.OffConnected()) {
+            Toast.makeText(AcceptActivity.this, "WiFi已关闭", 0).show();
         }
-
     }
 
     //ScanResult类型转为String

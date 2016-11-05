@@ -175,7 +175,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     adapter = new ArrayAdapter<>(SendActivity.this, android.R.layout.simple_list_item_1, isconnectIPList);
                     lv_ipList.setAdapter(adapter);
-                    Log.e("SendActivity", ">>>>>>>>>");
+//                    Log.e("SendActivity", ">>>>>>>>>");
                     Toast.makeText(SendActivity.this, "正在扫描...", 0).show();
                     break;
             }

@@ -31,7 +31,7 @@
         android:background="@drawable/but_bg_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="生成二维码"/>
+        android:text="@string/send_for_qr"/>
 
     <Button
         android:id="@+id/but_send"
