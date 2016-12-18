@@ -41,29 +41,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private WifiReceiver wifiReceiver;
     private boolean isConnected = false;
     private TextView but_exit;
-    private TextView tv_set;
     private MySharepreferences mspf;
     private String filePath;
     private Uri fileUri;
     public static File file = null;
+    private TextView tv_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initLayout();
 
+        // 获取WiFi管理服务
+        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiReceiver = new WifiReceiver();
+    }
+
+    private void initLayout() {
         but_send = (TextView) findViewById(R.id.but_sel_send);
         but_accept = (TextView) findViewById(R.id.but_sel_accept);
         but_exit = (TextView) findViewById(R.id.but_exit);
-        tv_set = (TextView) findViewById(R.id.tv_set);
+        tv_menu = (TextView) findViewById(R.id.tv_menu);
 
         but_send.setOnClickListener(this);
         but_accept.setOnClickListener(this);
         but_exit.setOnClickListener(this);
-        tv_set.setOnClickListener(this);
-        // 获取WiFi管理服务
-        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        wifiReceiver = new WifiReceiver();
+        tv_menu.setOnClickListener(this);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.but_exit:
                 finish();
                 break;
-            case R.id.tv_set:
+            case R.id.tv_menu:
                 Intent intent2 = new Intent(this, SetActivity.class);
                 startActivity(intent2);
                 break;

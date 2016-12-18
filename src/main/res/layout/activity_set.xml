@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <LinearLayout
+        android:id="@+id/ll1"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="300dp"
@@ -25,10 +28,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
@@ -51,4 +55,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
